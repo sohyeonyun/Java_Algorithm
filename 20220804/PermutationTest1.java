@@ -24,6 +24,7 @@ public class PermutationTest1 {
 
 	private static void perm(int cnt) { // cnt: 직전까지 뽑은 순열에 포함된 수의 개수, cnt + 1 번째 해당하는 순열에 포함될 수를 뽑기
 
+		System.out.println(Arrays.toString(numbers) + " " + cnt);
 		if (cnt == R) {
 			totalCnt++;
 			System.out.println(Arrays.toString(numbers));

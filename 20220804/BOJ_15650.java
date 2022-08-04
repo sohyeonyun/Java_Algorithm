@@ -2,30 +2,33 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 /*
- * 백준 15649 - n과 m (1)
- * nPm 의 모든 경우를 나열하라. 
+ * 백준 15650 - n과 m (2)
+ * nCm 의 모든 경우를 나열하라.
  */
 
-public class BOJ_15649 {
+public class BOJ_15650 {
 
+	static int n, m;
 	static int[] nums;
-	static boolean[] isSelected;
-	static int n;
-	static int m;
+//	static int tCnt;
 
 	public static void main(String[] args) {
+
 		Scanner sc = new Scanner(System.in);
 		n = sc.nextInt();
 		m = sc.nextInt();
 
 		nums = new int[m];
-		isSelected = new boolean[n + 1];
+//		tCnt = 0;
 
-		perm(0);
+		comb(0, 1);
+//		System.out.println("총 개수 : " + tCnt);
 	}
 
-	private static void perm(int cnt) {
+	static void comb(int cnt, int start) {
+
 		if (cnt == m) {
+//			tCnt++;
 			for(int num : nums) {
 				System.out.print(num + " ");
 			}
@@ -33,14 +36,11 @@ public class BOJ_15649 {
 			return;
 		}
 
-		for (int i = 1; i <= n; i++) {
-			if (isSelected[i])
-				continue;
+		for (int i = start; i <= n; i++) {
 			nums[cnt] = i;
-			isSelected[i] = true;
-			perm(cnt + 1);
-			isSelected[i] = false;
+			comb(cnt + 1, i + 1);
 		}
+
 	}
 
 }
