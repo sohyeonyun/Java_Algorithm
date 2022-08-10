@@ -20,13 +20,14 @@ class Input {
 }
 
 public class BOJ_17406 {
-	static int[][] arr;
+	static int[][] arr, origin; // 2차원 배열 저장할 곳 (연산 사용할 곳, 원본 값 저장할 곳)
 	static Integer[] orders; // 재귀 돌면서 현재 순서 저장
 	static boolean[] isSelected;
 	static List<Input> commandList; // 입력 받은 명령어들 저장
 	static List<Integer[]> orderList; // 순열 결과 저장
-	static int k;
+	static int k; // 회전 연산 횟수
 
+	// 2차원 배열 회전 메서드
 	static void rotate(int r, int c, int s) {
 		for (int k = 1; k <= s; k++) {
 			int x = r - 1 - k;
@@ -49,6 +50,7 @@ public class BOJ_17406 {
 
 	}
 
+	// n! 경우의 수들을 각 경우마다 orderList에 배열로 저장한다.
 	static void perm(int cnt) {
 		if (cnt == k) {
 			orderList.add(Arrays.copyOf(orders, orders.length));
@@ -97,37 +99,47 @@ public class BOJ_17406 {
 		orderList = new ArrayList<>();
 		perm(0);
 
+		// 2차원 원본 배열 저장할 곳
+		origin = new int[n][m];
+		// origin <- arr 2차원 배열 원본 복사해두기
+		for (int i = 0; i < n; i++) {
+			System.arraycopy(arr[i], 0, origin[i], 0, m);
+		}
+
 		// k 개의 연산을 순서를 바꾸며 수행
 		int MIN = Integer.MAX_VALUE;
 		for (int t = 0; t < orderList.size(); t++) {
-//			System.out.println(commandList.get(orderList.get(i)));
-//			Integer[] list = orderList.get(t);
-//			System.out.println(list[0] + " "+ list[1] + " " + list[2]);
-//			for(int i=0; i<k; i++) {
-//				rotate(list[0], list[1], list[2]);
-//				
-//			}
-//
-//			// 배열의 최솟값 찾기
+			// 연산을 수행할 순서 배열
+			Integer[] order = orderList.get(t);
+			// 뽑아온 순서에 따라 연산 수행
+			for (int i = 0; i < k; i++) {
+				Input command = commandList.get(order[i]);
+				rotate(command.r, command.c, command.s);
+			}
+
+//			// 배열 확인용 출력
 //			for (int i = 0; i < n; i++) {
-//				int sum = 0;
 //				for (int j = 0; j < m; j++) {
-//					sum += arr[i][j];
+//					System.out.print(arr[i][j] + " ");
 //				}
-//				MIN = Math.min(MIN, sum);
+//				System.out.println();
 //			}
+
+			// 배열의 최솟값 찾기
+			for (int i = 0; i < n; i++) {
+				int sum = 0;
+				for (int j = 0; j < m; j++) {
+					sum += arr[i][j];
+				}
+				MIN = Math.min(MIN, sum);
+			}
+
+			// origin -> arr 2차원 배열 원본 가져오기
+			for (int i = 0; i < n; i++) {
+				System.arraycopy(origin[i], 0, arr[i], 0, m);
+			}
 		}
 
 		System.out.println(MIN);
-
-//		// 배열 확인용 출력
-//		for (int i = 0; i < n; i++) {
-//			for (int j = 0; j < m; j++) {
-//				System.out.print(arr[i][j] + " ");
-//			}
-//			System.out.println();
-//		}
-
 	}
-
 }
