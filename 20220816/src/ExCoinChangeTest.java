@@ -5,8 +5,8 @@ public class ExCoinChangeTest {
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		int targetMoney = sc.nextInt();
+		
 		int[] units = { 500, 100, 50, 10, 5, 1 };
-
 		int[] counts = { sc.nextInt(), sc.nextInt(), sc.nextInt(), sc.nextInt(), sc.nextInt(), sc.nextInt() };
 
 		int totalMoney = 0;
