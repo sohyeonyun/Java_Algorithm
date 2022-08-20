@@ -11,13 +11,17 @@ public class AdjListTest2 {
     static ArrayList<Integer> [] list = null; // from 정점 정보를 관리
     
     public static void main(String[] args) {
+    	
         Scanner sc = new Scanner(System.in);
         N = sc.nextInt(); //정점수
         v = new int[N]; //방문체크 배열
+        
         list = new ArrayList[N];
+        
         for(int i = 0; i < N; i++) { // 배열 안에 리스트 만들어주기!!
         	list[i] = new ArrayList<Integer>();
         }
+        
         int E = sc.nextInt(); //간선 수
         for(int i = 0; i < E; i++) {
             int from = sc.nextInt();
