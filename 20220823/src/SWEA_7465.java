@@ -32,14 +32,16 @@ public class SWEA_7465 {
 				unionSet(a, b);
 			}
 
-			// 서로 다른 부모 개수 찾기 위해 set을 이용
-			HashSet<Integer> set = new HashSet<>();
-			for (int i = 1; i <= n; i++) {
-				set.add(findSet(i));
+			// 서로 다른 부모 개수 찾기
+			// 부모 배열의 특성 이용
+			int cnt = 0;
+			for (int i = 1; i < n + 1; i++) {
+				if (i == p[i])
+					cnt++;
 			}
 
 			// 결과
-			sb.append("#").append(t).append(" ").append(set.size()).append('\n');
+			sb.append("#").append(t).append(" ").append(cnt).append('\n');
 		}
 
 		System.out.print(sb);
@@ -56,7 +58,7 @@ public class SWEA_7465 {
 	static int findSet(int x) {
 		if (x == p[x])
 			return x;
-		// 부모 찾아서 저장해준다. 경로 압축 
+		// 부모 찾아서 저장해준다. 경로 압축
 		return p[x] = findSet(p[x]);
 	}
 
