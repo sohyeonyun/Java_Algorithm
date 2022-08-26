@@ -48,7 +48,6 @@ public class PrimTest_PQ2 {
 		minEdge[0] = 0;
 		int result = 0; // 최소신장트리 비용구하기
 
-		int min = Integer.MAX_VALUE;
 		PriorityQueue<Data> pq = new PriorityQueue<>((v1, v2) -> v1.weight - v2.weight);
 		pq.offer(new Data(0, minEdge[0]));
 		int cnt = 0;
