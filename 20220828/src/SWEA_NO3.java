@@ -6,6 +6,10 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
+/*
+ * 셔플 
+ */
+
 public class SWEA_NO3 {
 
 	static int N;
