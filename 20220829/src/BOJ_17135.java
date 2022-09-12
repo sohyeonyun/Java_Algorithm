@@ -68,6 +68,7 @@ public class BOJ_17135 {
 		
 		ArrayList<Point> removeList;
 
+		int cnt = 0;
 		int r = N - 1;
 
 		// 적들 한칸씩 전진 
@@ -79,6 +80,7 @@ public class BOJ_17135 {
 				// 궁수 위치 
 				int x = r + 1;
 				int y = position[k];
+				System.out.println("궁수 : " + x + " " + y);
 				// 왼쪽부터 위로 올라가며 쏜다.
 				LOOP: for (int i = r; i >= 0; i--) {
 					// 거리 가능한지 
@@ -88,7 +90,7 @@ public class BOJ_17135 {
 					for (int j = 0; j < M; j++) {
 						// 거리 가능한지 
 						if(Math.abs(x - i) + Math.abs(y - j) > D) {
-							break;
+							continue;
 						}
 						// 적 있으면 삭제 리스트에 넣음  
 						if(map[i][j] == 1) {
@@ -100,14 +102,21 @@ public class BOJ_17135 {
 			}
 			
 			// 적 죽이기 
-			
+			for(Point p: removeList) {
+				if(map[p.x][p.y] == 1) {
+					System.out.println(p.x + " " + p.y);
+					cnt++;
+					map[p.x][p.y] = 0;
+				}
+			}
 			
 			
 			// 한칸 전진 
 			r--;
 		}
 		
-		
+		MAX = Math.max(MAX, cnt);
+		System.out.println(" =================== " + cnt);
 
 	}
 	
