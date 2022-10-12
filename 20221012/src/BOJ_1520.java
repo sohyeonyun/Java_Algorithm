@@ -4,10 +4,13 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.StringTokenizer;
 
+/*
+ * 내리막길 - DP + DFS
+ */
 public class BOJ_1520 {
 
 	static int N, M;
-	static int[][] map, v;
+	static int[][] map, dp;
 
 	public static void main(String[] args) throws IOException {
 
@@ -24,54 +27,48 @@ public class BOJ_1520 {
 		}
 
 		// 방문 안함을 -1로 초기화
-		v = new int[N][M];
+		dp = new int[N][M];
 		for (int i = 0; i < N; i++) {
-			Arrays.fill(v[i], -1);
+			Arrays.fill(dp[i], -1);
 		}
 
-		v[0][0] = 0;
-		dfs(0, 0);
-
-		System.out.println(v[N-1][M-1]);
+		System.out.println(dfs(0, 0));
 
 	}
 
-	static int[] dr = {1, -1, 0, 0};
-	static int[] dc = {0, 0, 1, -1};
-	private static boolean dfs(int r, int c) {
-		System.out.println(r + " " + c);
-		for(int i=0; i<N; i++) {
-			for(int j=0; j<M; j++) {
-				System.out.print(v[i][j] + " ");
-			}
-			System.out.println();
-		}
-		System.out.println();
+	static int[] dr = { 1, -1, 0, 0 };
+	static int[] dc = { 0, 0, 1, -1 };
+
+	private static int dfs(int r, int c) {
 
 		// 도착
-		if(r == N-1 && c == M-1) {
-			return true;
+		if (r == N - 1 && c == M - 1) {
+			return 1;
 		}
-		
-		for(int i=0; i<4; i++) {
+		// 이미 방문 했으면
+		if(dp[r][c] != -1) {
+			return dp[r][c];
+		}
+
+		// 방문 처리
+		dp[r][c] = 0;
+		// 사방위 탐색
+		for (int i = 0; i < 4; i++) {
 			int nr = r + dr[i];
 			int nc = c + dc[i];
-			if(nr < 0 || nr >= N || nc < 0 || nc >= M) {
+			// 범위 체크
+			if (nr < 0 || nr >= N || nc < 0 || nc >= M) {
 				continue;
 			}
 			// 내리막길 아니면 패스
-			if(map[r][c] <= map[nr][nc]) {
+			if (map[r][c] <= map[nr][nc]) {
 				continue;
 			}
-			// 방문체크
-			if(v[nr][nc] == -1) {
-				v[nr][nc] = 0;
-			}
-			if(dfs(nr, nc)) { ////////////////////// !!!
-				v[nr][nc]++;
-			}
+			// dp 업데이트 - 현재 위치에서 도착지까지 갈 수 있는 경로 수
+			dp[r][c] += dfs(nr, nc);
 		}
-		return false;
+		
+		return dp[r][c]; // 이부분이 이전으로 타고타고 넘겨주는 부분!
 	}
 
 }
