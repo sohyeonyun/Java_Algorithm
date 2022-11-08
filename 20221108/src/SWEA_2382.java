@@ -29,7 +29,6 @@ public class SWEA_2382 {
 			K = Integer.parseInt(st.nextToken());
 			
 			q = new LinkedList<>();
-			map = new Point[N][N];
 			
 			for(int i=0; i<K; i++) {
 				st = new StringTokenizer(br.readLine());
@@ -42,25 +41,68 @@ public class SWEA_2382 {
 			
 			int ans = simulate();
 			
-			sb.append("#").append(t).append(" ").append(ans);
+			sb.append("#").append(t).append(" ").append(ans).append("\n");
 		}
 		
-		
+		System.out.print(sb);
 		
 	}
 	
 	private static int simulate() {
 
+		// M번 이동시키기
 		for(int i=0; i<M; i++) {
+			map = new Point[N][N];
+			// 군집 이동시키기
 			move();
+			// 이차원배열 군집을 큐로 담기
+			putToQueue();
+//			debug();
 		}
 		
+		// 남은 미생물 수
 		return getRemain();
 	}
 
+
+//	private static void debug() {
+//		for(int i=0; i<N; i++) {
+//			for(int j=0; j<N; j++) {
+//				if(map[i][j] == null) {
+//					System.out.print("-");
+//				} else {
+//					System.out.print(map[i][j].n);
+//				}
+//			}
+//			System.out.println();
+//		}
+//	}
+
 	private static int getRemain() {
-		// TODO Auto-generated method stub
-		return 0;
+		int sum = 0;
+		
+		for(int i=0; i<N; i++) {
+			for(int j=0; j<N; j++) {
+				if(map[i][j] != null) {
+					sum += map[i][j].n;
+				}
+			}
+		}
+		
+		return sum;
+	}
+	
+	private static void putToQueue() {
+		
+		for(int i=0; i<N; i++) {
+			for(int j=0; j<N; j++) {
+				if(map[i][j] != null) {
+					map[i][j].n = map[i][j].sum;
+					map[i][j].max = map[i][j].sum;
+					q.offer(map[i][j]);
+				}
+			}
+		}
 	}
 
 	private static void move() {
@@ -74,18 +116,26 @@ public class SWEA_2382 {
 			int nc = cur.c + dc[cur.d];
 			
 			// 약품이 칠해진 셀에 도착
+			boolean flag = false;
 			if(nr == 0) {
 				cur.d = 1; // 이동 방향 변경
-				cur.n /= 2; // 미생물 반이 죽음
+				flag = true;
 			} else if(nr == N - 1) {
 				cur.d = 0;
-				cur.n /= 2;
+				flag = true;
 			} else if(nc == 0) {
 				cur.d = 3;
-				cur.n /= 2;
+				flag = true;
 			} else if(nc == N - 1) {
 				cur.d = 2;
-				cur.n /= 2;
+				flag = true;
+			}
+
+			// 약품 칠해졌으면
+			if(flag) {
+				cur.n /= 2; // 미생물 반이 죽음
+				cur.max /= 2;
+				cur.sum /= 2;
 			}
 			
 			// 이동
@@ -96,15 +146,18 @@ public class SWEA_2382 {
 			if(map[cur.r][cur.c] != null) {
 				Point pre = map[cur.r][cur.c];
 				// 최대 군집의 방향으로 저장
-				if(pre.max < cur.n) {
-					pre.max = cur.n;
+				if(pre.max < cur.max) {
+					pre.max = cur.max;
 					pre.d = cur.d;
 				}
 				// 합침
 				pre.sum += cur.n;
-			} 
-			// 맵에 저장
-			map[cur.r][cur.c] = cur; 
+				// 맵에 저장
+				map[cur.r][cur.c] = pre; 
+			} else {
+				// 맵에 저장
+				map[cur.r][cur.c] = cur;
+			}
 		}
 		
 	}
@@ -121,6 +174,12 @@ public class SWEA_2382 {
 			this.max = max;
 			this.sum = sum;
 		}
+
+		@Override
+		public String toString() {
+			return "Point [r=" + r + ", c=" + c + ", n=" + n + ", d=" + d + ", max=" + max + ", sum=" + sum + "]";
+		}
+		
 	}
 
 }
