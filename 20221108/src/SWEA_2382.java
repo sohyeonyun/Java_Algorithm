@@ -5,6 +5,9 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
+/*
+ * 미생물 
+ */
 public class SWEA_2382 {
 	
 	static int N, M, K;
