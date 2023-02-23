@@ -12,6 +12,7 @@ public class _2638 {
 	static int N, M;
 	static int[][] map;
 	static Queue<Point> list = new LinkedList<>();
+	static Queue<Point> removeList = new LinkedList<>();
 	static int time = 0;
 
 	public static void main(String[] args) throws IOException {
@@ -42,30 +43,49 @@ public class _2638 {
 		// 겉면 채우기
 		fillOutside();
 		
-		// 치즈 다 녹일 때까지 
-		while(!list.isEmpty()) {
+		// 치즈 없으면 종료
+		while(!list.isEmpty()) {			
 			time++;
 			
-			int size = list.size();
-			for(int i=0; i<size; i++) {
-				Point cur = list.poll();
-				// 사방위에 공기 접촉 수
-				int cnt = 0;
-				for(int d=0; d<4; d++) {
-					int nx = cur.x + dx[d];
-					int ny = cur.y + dy[d];
-					if(map[nx][ny] == 2) {
-						cnt++;
-					}
-				}
-				if(cnt >= 2) {
-					map[cur.x][cur.y] = 2;
-					list.remove(cur);
-				} else {
-					list.offer(cur);
+			// 녹는 치즈 찾기 
+			findKillCheese();
+			
+			// 치즈 없애기
+			killCheese();
+		}
+	}
+
+	private static void killCheese() {
+
+		while(!removeList.isEmpty()) {
+			Point cur = removeList.poll();
+
+			dfs(cur.x, cur.y, 2);
+		}
+	}
+
+	private static void findKillCheese() {
+
+		// 모든 치즈 탐색하며 죽일거 찾기
+		int size = list.size();
+		for(int i=0; i<size; i++) {
+			Point cur = list.poll();
+			
+			// 치즈의 사방위에 공기 접촉 수
+			int cnt = 0;
+			for(int d=0; d<4; d++) {
+				int nx = cur.x + dx[d];
+				int ny = cur.y + dy[d];
+				if(map[nx][ny] == 2) {
+					cnt++;
 				}
 			}
 			
+			if(cnt >= 2) { // 죽이기
+				removeList.offer(new Point(cur.x, cur.y));
+			} else { // 살리기
+				list.offer(cur);
+			}
 		}
 	}
 
@@ -92,15 +112,15 @@ public class _2638 {
 		
 	}
 	
-	private static void debug() {
-
-		for(int i=0; i<N; i++) {
-			for(int j=0; j<N; j++) {
-				System.out.print(map[i][j] + " ");
-			}
-			System.out.println();
-		}
-	}
+//	private static void debug() {
+//
+//		for(int i=0; i<N; i++) {
+//			for(int j=0; j<N; j++) {
+//				System.out.print(map[i][j] + " ");
+//			}
+//			System.out.println();
+//		}
+//	}
 
 	private static void dfs(int x, int y, int num) {
 
