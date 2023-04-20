@@ -26,38 +26,41 @@ public class g5_1092 {
 		
 		int answer = 1;
 		int craine_idx = 0;
-		int box_idx = 0;
-		while(box_idx < M) {
-			int box = boxes[box_idx];
-			
-			// 크레인 하나씩 탐색
-			for(int j=0; j<M; j++) {
-				int cur = (craine_idx + j) % M;
-				
-				// 담기
-				if(craines[cur] >= box) {
-					// 마지막 크레인
-					if(craine_idx == N - 1) {
-						answer++;
-					}
-					// 다음 크레인
-					craine_idx = (craine_idx + 1) % N;
-					box_idx++;
+		
+		boolean[] usedCraine = new boolean[N];
+		
+		for(int i=0; i<M; i++) {
+			for(int j=i; j<M; j++) {
+				System.out.println(i + " " + j + ": " + craines[craine_idx] + " " + boxes[j]);
+				if (boxes[j] == -1) {
+					System.out.println(1);
 					break;
 				}
-				// 못 담아
-				else {
-					// 첫번째 크레인인데 못담으면 다 못담음!!
-					if(craine_idx == 0) {
-						System.out.println(-1);
-						return;
+				if (usedCraine[craine_idx]) {
+					craine_idx = (craine_idx + 1) % N;
+					System.out.println(2);
+					System.out.println(2);
+					if(craine_idx == N - 1) {
+						answer++;
+						Arrays.fill(usedCraine, false);
 					}
-					// 크레인 한번 옮기고 젤 앞 크레인으로 포인팅
-					answer++;
-					j = M - 1; // 마지막 회차로 시킴.
-					craine_idx = 0;
 				}
-				
+				if (craines[craine_idx] >= boxes[j]) {
+					System.out.println(3);
+					boxes[j] = -1;
+					usedCraine[craine_idx] = true;
+					if(craine_idx == N - 1) {
+						answer++;
+						Arrays.fill(usedCraine, false);
+					}
+					craine_idx = (craine_idx + 1) % N;
+				} else if(craine_idx == 0){
+					System.out.println(-1);
+					return;
+				} else {
+					System.out.println(4);
+					
+				}
 			}
 		}
 		
